@@ -152,16 +152,19 @@ class Navegador:
             )
             btn_cvs.click()
 
-            time.sleep(5)
+            tempo_maximo = 15
+            tempo_inicial = time.time()
 
             caminho_pasta = os.path.join(os.environ['USERPROFILE'], 'Downloads')
-            nome_arquivo = "emendas"  
-            arquivo = (fr'{caminho_pasta}\{nome_arquivo}.csv') 
+            nome_arquivo = "emendas"
+            arquivo = (fr'{caminho_pasta}\{nome_arquivo}.csv')  
 
-            if not arquivo:
-                return False
-            else:
-                return True
+
+            while (not arquivo) and time.time() - tempo_inicial < tempo_maximo:
+                time.sleep(1)
+
+            return True
+                
         except Exception as e:
             print(f'Erro ao baixar arquivo: {e}')
             return False

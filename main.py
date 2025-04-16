@@ -30,6 +30,7 @@ def tratarDownload() -> str:
         if not os.path.exists(caminho_destino):
             os.makedirs(caminho_destino)
 
+
         date = datetime.datetime.now().year
 
         novo_nome_arquivo = f"Emendas Parlamentares Escolas {date}.csv"
@@ -37,7 +38,7 @@ def tratarDownload() -> str:
         novo_caminho_arquivo = os.path.normpath(novo_caminho_arquivo) 
 
         shutil.move(arquivo, novo_caminho_arquivo)
-        print(f"Arquivo {arquivo} foi movido e renomeado para {novo_caminho_arquivo}")
+        print(f"Arquivo foi movido e renomeado para {novo_caminho_arquivo} com sucesso!")
 
         return novo_caminho_arquivo
     except Exception as e:
@@ -103,6 +104,7 @@ def main():
     try:
         nome_processo = "EXTEMENDA_PARLAMENTAR_EDU"
         url_site = "https://portaldatransparencia.gov.br/"
+        load_dotenv(dotenv_path=r'C:\RPA\ProtótipoEmendasParlamentares\database.env')
 
         # Conexão com o Banco de dados!
         banco = BancoDeDados(host=os.getenv("DB_HOST"), database=os.getenv("DB_NAME"), user=os.getenv("DB_USER"), password=os.getenv("DB_PASSWORD"))

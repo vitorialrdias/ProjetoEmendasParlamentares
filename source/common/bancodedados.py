@@ -101,13 +101,8 @@ def createTable(banco, nome_processo, colunas):
 
 def insertLogExec(banco, nome_processo, colunas, row):
     import pandas as pd
-    # Remover ou substituir os valores NaN com uma string vazia ou 'NULL'
     valores = [row[coluna] if pd.notna(row[coluna]) else "" for coluna in colunas]
-    
-    # Monta o nome das colunas para a query
     campos = ", ".join([f"`{coluna.replace(' ', '_').replace('-', '_')}`" for coluna in colunas])
-
-    # Cria placeholders para a query de inserção
     placeholders = ", ".join(["%s"] * len(colunas))
 
     query = f"""
