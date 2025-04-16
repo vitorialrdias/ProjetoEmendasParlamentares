@@ -13,12 +13,10 @@ import matplotlib.pyplot as plt
 
 
 def tratarDownload() -> str:
-    try:
-
+    # Nessa função fazemos o tratamento do nome do arquivo, movendo o mesmo para a pasta destinada
+    try:    
         caminho_pasta = os.path.join(os.environ['USERPROFILE'], 'Downloads')
         nome_arquivo = "emendas"
-
-
         arquivo = (fr'{caminho_pasta}\{nome_arquivo}.csv')
 
         print(arquivo)
@@ -27,20 +25,16 @@ def tratarDownload() -> str:
             print('Arquivo não encontrado!')
             return
         
-
+        
         caminho_destino = os.path.join(os.environ['USERPROFILE'], 'Documentos', 'Emendas Educacao')
-
         if not os.path.exists(caminho_destino):
             os.makedirs(caminho_destino)
 
-
         date = datetime.datetime.now().year
 
-
         novo_nome_arquivo = f"Emendas Parlamentares Escolas {date}.csv"
-    
         novo_caminho_arquivo = os.path.join(caminho_destino, novo_nome_arquivo)
-        novo_caminho_arquivo = os.path.normpath(novo_caminho_arquivo)  # Normaliza o caminho
+        novo_caminho_arquivo = os.path.normpath(novo_caminho_arquivo) 
 
         shutil.move(arquivo, novo_caminho_arquivo)
         print(f"Arquivo {arquivo} foi movido e renomeado para {novo_caminho_arquivo}")
@@ -51,6 +45,7 @@ def tratarDownload() -> str:
         return None
     
 def lerArquivoCSV(banco, nome_processo, caminho_arquivo) -> bool:
+    # Nessa função realizamos a leitura do arquivo e inserção no banco de dados
     try:
         df = pd.read_csv(caminho_arquivo, sep=';')
         
@@ -79,10 +74,10 @@ def lerArquivoCSV(banco, nome_processo, caminho_arquivo) -> bool:
         return False
 
 def uploadDados(banco, nome_processo) -> bool:
+    # Nessa função carregamos os dados para retornar em um gráfico 
     try:
         dados = bancodedados.selectLogExec(banco, nome_processo)
 
-        # Exemplo de conversão
         df = pd.DataFrame(dados, columns=['AUTOR_DA_EMENDA', 'TOTAL_POR_AUTOR'])
         print(df)
 
@@ -104,6 +99,7 @@ def uploadDados(banco, nome_processo) -> bool:
 
 
 def main():
+    # Função principal de execução do projeto
     try:
         nome_processo = "EXTEMENDA_PARLAMENTAR_EDU"
         url_site = "https://portaldatransparencia.gov.br/"
@@ -113,7 +109,7 @@ def main():
         banco.conectar()
 
         success = False
-        while not success:
+        while not success:  # Enquanto o download do arquivo não for bem sucedido, o processo permanece no while.
             site = Navegador(url_site)
             driver = site.openPage()
             site.navSite(driver)
