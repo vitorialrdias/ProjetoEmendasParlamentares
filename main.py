@@ -8,6 +8,7 @@ import shutil
 import datetime
 import unicodedata
 import pandas as pd
+import seaborn as sns
 from dotenv import load_dotenv
 import matplotlib.pyplot as plt
 
@@ -77,22 +78,43 @@ def lerArquivoCSV(banco, nome_processo, caminho_arquivo) -> bool:
 def uploadDados(banco, nome_processo) -> bool:
     # Nessa função carregamos os dados para retornar em um gráfico 
     try:
+        # Obter os dados do banco
         dados = bancodedados.selectLogExec(banco, nome_processo)
-
+        
+        # Criar um DataFrame com os dados
         df = pd.DataFrame(dados, columns=['AUTOR_DA_EMENDA', 'TOTAL_POR_AUTOR'])
         print(df)
 
-        plt.figure(figsize=(10, 6))
-        plt.bar(df['AUTOR_DA_EMENDA'], df['TOTAL_POR_AUTOR'], color='skyblue')
+        # Configuração do gráfico
+        plt.figure(figsize=(12, 8))
 
-        plt.title('Top 5 Autores de Emenda')
-        plt.xlabel('Autor')
-        plt.ylabel('Total de Emendas')
-        plt.xticks(rotation=45)
+        # Gráfico de barras horizontais
+        sns.barplot(x='TOTAL_POR_AUTOR', y='AUTOR_DA_EMENDA', data=df, palette='Blues_d', ci=None)
+
+        # Título e rótulos
+        plt.title('Top 5 Autores de Emenda', fontsize=16, weight='bold')
+        plt.xlabel('Total de Emendas', fontsize=12)
+        plt.ylabel('Autor', fontsize=12)
+
+        # Estilo para as barras
+        for p in plt.gca().patches:
+            p.set_edgecolor('black')
+            p.set_linewidth(1)
+
+        # Adicionar valores nas barras
+        for index, value in enumerate(df['TOTAL_POR_AUTOR']):
+            plt.text(value + 0.2, index, str(value), va='center', fontsize=12)
+
+        # Ajuste dos rótulos do eixo X
+        plt.xticks(fontsize=10, rotation=45, ha='right')
+
+        # Ajustes do layout
         plt.tight_layout()
 
+        # Salvar o gráfico em um arquivo PNG com alta resolução
         plt.savefig(r'C:\RPA\ProtótipoEmendasParlamentares\source\images\top5_autores.png', dpi=200, bbox_inches='tight')
-
+        
+        # Exibir o gráfi
         return True
     except Exception as e:
         print(f'Erro ao tentar criar gráfico demonstrativo. {e}')

@@ -158,10 +158,10 @@ class Navegador:
 
             caminho_pasta = os.path.join(os.environ['USERPROFILE'], 'Downloads')
             nome_arquivo = "emendas"
-            arquivo = (fr'{caminho_pasta}\{nome_arquivo}.csv')  
+            arquivo = os.path.join(caminho_pasta, f'{nome_arquivo}.csv')
 
-
-            while (not arquivo) and time.time() - tempo_inicial < tempo_maximo:
+            # Verifica se o arquivo existe no caminho
+            while not os.path.exists(arquivo) and time.time() - tempo_inicial < tempo_maximo:
                 time.sleep(1)
 
             return True

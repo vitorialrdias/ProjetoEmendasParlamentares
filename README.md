@@ -5,6 +5,7 @@
 
 ### Para visualização de gráficos:
 - matplotlib
+- seaborn
 
 ### Para conexão com banco de dados MySQL:
 - mysql-connector-python
