@@ -147,6 +147,7 @@ class Navegador:
     
     def downloadArquivo(self, driver) -> bool:
         try:
+            # Inicia o processo de download do arquivo
             btn_cvs = WebDriverWait(driver, 15).until(
                 EC.element_to_be_clickable((By.XPATH, "//*[@id='btnBaixar']"))
             )
