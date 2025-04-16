@@ -26,15 +26,14 @@ def tratarDownload() -> str:
             print('Arquivo não encontrado!')
             return
         
-        
-        caminho_destino = os.path.join(os.environ['USERPROFILE'], 'Documentos', 'Emendas Educacao')
+        caminho_destino = r"C:\RPA\ProtótipoEmendasParlamentares\source\data"
         if not os.path.exists(caminho_destino):
             os.makedirs(caminho_destino)
 
 
         date = datetime.datetime.now().year
 
-        novo_nome_arquivo = f"Emendas Parlamentares Escolas {date}.csv"
+        novo_nome_arquivo = f"EmendasParlamentaresEscolas-{date}.csv"
         novo_caminho_arquivo = os.path.join(caminho_destino, novo_nome_arquivo)
         novo_caminho_arquivo = os.path.normpath(novo_caminho_arquivo) 
 
@@ -78,43 +77,32 @@ def lerArquivoCSV(banco, nome_processo, caminho_arquivo) -> bool:
 def uploadDados(banco, nome_processo) -> bool:
     # Nessa função carregamos os dados para retornar em um gráfico 
     try:
-        # Obter os dados do banco
         dados = bancodedados.selectLogExec(banco, nome_processo)
-        
-        # Criar um DataFrame com os dados
         df = pd.DataFrame(dados, columns=['AUTOR_DA_EMENDA', 'TOTAL_POR_AUTOR'])
         print(df)
 
-        # Configuração do gráfico
         plt.figure(figsize=(12, 8))
 
-        # Gráfico de barras horizontais
         sns.barplot(x='TOTAL_POR_AUTOR', y='AUTOR_DA_EMENDA', data=df, palette='Blues_d', ci=None)
 
-        # Título e rótulos
+
         plt.title('Top 5 Autores de Emenda', fontsize=16, weight='bold')
         plt.xlabel('Total de Emendas', fontsize=12)
         plt.ylabel('Autor', fontsize=12)
 
-        # Estilo para as barras
         for p in plt.gca().patches:
             p.set_edgecolor('black')
             p.set_linewidth(1)
 
-        # Adicionar valores nas barras
         for index, value in enumerate(df['TOTAL_POR_AUTOR']):
             plt.text(value + 0.2, index, str(value), va='center', fontsize=12)
 
-        # Ajuste dos rótulos do eixo X
         plt.xticks(fontsize=10, rotation=45, ha='right')
-
-        # Ajustes do layout
         plt.tight_layout()
 
-        # Salvar o gráfico em um arquivo PNG com alta resolução
+
         plt.savefig(r'C:\RPA\ProtótipoEmendasParlamentares\source\images\top5_autores.png', dpi=200, bbox_inches='tight')
-        
-        # Exibir o gráfi
+
         return True
     except Exception as e:
         print(f'Erro ao tentar criar gráfico demonstrativo. {e}')
