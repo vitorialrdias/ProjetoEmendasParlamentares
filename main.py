@@ -83,20 +83,24 @@ def uploadDados(banco, nome_processo) -> bool:
 
         plt.figure(figsize=(12, 8))
 
+        # Criamos as barras do gráfico
         sns.barplot(x='TOTAL_POR_AUTOR', y='AUTOR_DA_EMENDA', data=df, palette='Blues_d', ci=None)
 
-
+        # Configuramos os títulos dos dados
         plt.title('Top 5 Autores de Emenda', fontsize=16, weight='bold')
         plt.xlabel('Total de Emendas', fontsize=12)
         plt.ylabel('Autor', fontsize=12)
 
+        # Design do gráfico
         for p in plt.gca().patches:
             p.set_edgecolor('black')
             p.set_linewidth(1)
 
+        # Formatando os valores
         for index, value in enumerate(df['TOTAL_POR_AUTOR']):
             plt.text(value + 0.2, index, str(value), va='center', fontsize=12)
 
+        # Layout do gráfico
         plt.xticks(fontsize=10, rotation=45, ha='right')
         plt.tight_layout()
 
